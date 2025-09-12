@@ -98,3 +98,15 @@ def get_number_rows(ai_settings, ship_height, alien_height):
     number_rows = int(available_space_y / (2 * alien_height))
     return number_rows
 
+def update_aliens(ai_settings, aliens):
+    """
+    检查是否有外星人位于屏幕边缘，更新整群外星人的位置
+    """
+    check_fleet_edges(ai_settings, aliens)
+    aliens.update()
+
+def check_fleet_edges(ai_settings, aliens):
+    """有外星人到达边缘时采取相应措施"""
+    for alien in aliens.sprites():
+        alien.rect.y += ai_settings.fleet_drop_speed
+    ai_settings.fleet_direction *= -1
