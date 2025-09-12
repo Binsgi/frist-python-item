@@ -15,7 +15,7 @@ class Ship():
         self.rect.bottom = self.screen_rect.bottom
 
         #在飞船的属性center中存储最小值
-        self.center = float(self.rect.center)
+        self.center = float(self.rect.centerx)
 
         #移动标志
         self.moving_right = False
