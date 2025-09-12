@@ -21,4 +21,9 @@ def run_game():
         ship.update()
         gf.update_screen(ai_settings,screen,ship)
 
+        #让最近绘制的屏幕可见
+        pygame.display.flip()
+
 run_game()
+            
+        
