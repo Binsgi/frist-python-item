@@ -17,19 +17,7 @@ def run_game():
 
     #开始游戏的主循环
     while True:
-           
-        #监视键盘鼠标事件
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-        
-        #每次循环时都重绘屏幕
-        screen.fill(ai_settings.bg_color)
-        ship.blitme()
-
-        #让最近绘制的屏幕可见
-        pygame.display.flip()
+        gf.check_events(ship)
+        gf.update_screen(ai_settings,screen,ship)
 
 run_game()
-            
-        
