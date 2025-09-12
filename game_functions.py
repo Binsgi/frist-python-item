@@ -54,7 +54,7 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     #让最近绘制的屏幕可见
     pygame.display.flip()
 
-def update_bullets(bullets):
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
     """更新子弹位置，并删除已消失的子弹"""
     bullets.update()
     #删除已消失的子弹
@@ -62,10 +62,22 @@ def update_bullets(bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
+    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+    
+def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+    """响应子弹和外星人碰撞"""
+    #删除发生碰撞的子弹和外星人
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if len(aliens) == 0:
+        #删除现有的子弹并创建一群新的外星人
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens)
+
 def get_number_aliens_x(ai_settings, alien_width):
     """计算每行可容纳多少个外星人"""
     available_space_x = ai_settings.screen_width - 2 * alien_width
-    number_aliens_x =int(available_space_x / (2 * alien_width))
+    number_aliens_x = int(available_space_x / (2 * alien_width))
     return number_aliens_x
 
 def create_alien(ai_settings, screen, aliens,alien_number, row_number):
@@ -107,6 +119,13 @@ def update_aliens(ai_settings, aliens):
 
 def check_fleet_edges(ai_settings, aliens):
     """有外星人到达边缘时采取相应措施"""
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(ai_settings, aliens)
+            break
+
+def change_fleet_direction(ai_settings, aliens):
+    """整群外星人下移，并改变方向"""
     for alien in aliens.sprites():
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
